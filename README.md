@@ -1,2 +1,2 @@
 # filedistance
-Progetto per corso di Sistemi Operativi
+Progetto in C per corso di Sistemi Operativi Laboratorio.

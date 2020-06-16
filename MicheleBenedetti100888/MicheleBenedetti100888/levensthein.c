@@ -8,8 +8,6 @@
 
 #include "levensthein.h"
 
-Lista *list = NULL;
-
 int minimum(int a, int b, int c) {
 
     int min = a;
@@ -27,7 +25,21 @@ void deallocateMat(int size, int** mat){
     free(mat);
 }
 
-void matCalculate(int **mat, char *str1, int x, char *str2, int y){
+void PrintMatrix(int **matrix, int rows, int columns){
+    
+    printf("\n");
+    for(int i=0; i<rows; i++){
+        for(int j=0; j<columns; j++)
+            printf("%d\t", matrix[i][j]);
+        printf("\n");
+    }
+}
+
+Lista *matCalculate(int **mat, char *str1, int x, char *str2, int y){
+    
+    Lista *list = NULL;
+    
+    PrintMatrix(mat, x, y);
     
     int curr = mat[x][y];
 
@@ -66,63 +78,77 @@ void matCalculate(int **mat, char *str1, int x, char *str2, int y){
     }
     reverse(&list);
     printList(list);
+    return list;
 }
 
-char *saveOnFile(char *outputfile){
+char *getInst(Lista *list){
+    switch (list->type) {
+        case SET:
+            return "SET";
+            break;
+        case ADD:
+            return "ADD";
+            break;
+        case DEL:
+            return "DEL";
+            break;
+    }
+}
+
+char *saveOnFile(char *outputfile, Lista *list){
     FILE *filebin;
     if ((filebin = fopen(outputfile,"wb+")) == NULL){
         printf("Error! opening file");
         exit(1);
     }
     
+    char* command = NULL;
+    int num = 0;
+    
     while (list != NULL) {
         switch (list->type) {
             case DEL:
-                fprintf(filebin, "DEL%i\n", list->pos);
+                command = getInst(list);
+                for (int i = 0; i<3; i++) {
+                    fseek(filebin, 0L, SEEK_END);
+                    fwrite(&command[i], sizeof(char), 1, filebin);
+                }
+                fseek(filebin, 0L, SEEK_END);
+                fwrite(&list->pos, sizeof(int), 1, filebin);
+                //fprintf(filebin, "DEL%i\n", list->pos);
                 break;
             case ADD:
-                fprintf(filebin, "ADD%i%s\n", list->pos, &list->character);
+                command = getInst(list);
+                for (int i = 0; i<3; i++) {
+                    fseek(filebin, 0L, SEEK_END);
+                    fwrite(&command[i], sizeof(char), 1, filebin);
+                }
+                fseek(filebin, 0L, SEEK_END);
+                num = list->pos;
+                fwrite(&num, sizeof(int), 1, filebin);
+                fseek(filebin, 0L, SEEK_END);
+                fwrite(&list->character, sizeof(char), 1, filebin);
+                //fseek(filebin, 0L, SEEK_END);
+                //fprintf(filebin, "ADD%i%s\n", list->pos, &list->character);
                 break;
             case SET:
-                fprintf(filebin, "SET%i%s\n", list->pos, &list->character);
+                command = getInst(list);
+                for (int i = 0; i<3; i++) {
+                    fseek(filebin, 0L, SEEK_END);
+                    fwrite(&command[i], sizeof(char), 1, filebin);
+                }
+                fseek(filebin, 0L, SEEK_END);
+                num = list->pos;
+                fwrite(&num, sizeof(int), 1, filebin);
+                fseek(filebin, 0L, SEEK_END);
+                fwrite(&list->character, sizeof(char), 1, filebin);
+                //fprintf(filebin, "SET%i%s\n", list->pos, &list->character);
                 break;
         }
         list = list->next;
     }
     fclose(filebin);
     return outputfile;
-}
-
-void readFromFile(char *filem){
-    
-    Lista listApp;
-    
-    FILE *binfile;
-    if((binfile = fopen(filem, "rb")) == NULL){
-        perror("Can't open file");
-        exit(1);
-    }
-    fseek(binfile, 0L, SEEK_END);
-    long sizeBin = ftell(binfile);
-    rewind(binfile);
-    
-    for (int i =0; i<sizeBin; i++) {
-    
-        fread(&listApp, sizeof(Lista), 1, binfile);
-        printf("\nCHAR: %c \n", listApp.character);
-        
-    }
-    fclose(binfile);
-}
-
-void PrintMatrix(int **matrix, int rows, int columns){
-    
-    printf("\n");
-    for(int i=0; i<rows; i++){
-        for(int j=0; j<columns; j++)
-            printf("%d\t", matrix[i][j]);
-        printf("\n");
-    }
 }
 
 char *createString(char *file){
@@ -168,10 +194,12 @@ int **matGenerate(char *str1, int x, char *str2, int y){
             mat[0][j]=j;
         }
     }
-    return initMatrix(mat, str1, x, str2, y);
+    int **matApp = initMatrix(mat, str1, x, str2, y);
+    PrintMatrix(matApp, x, y);
+    return matApp;
 }
 
-int levensthein_distance(char *file1, char *file2, int flag){
+int levensthein_distance(char *file1, char *file2){
     
     char *str1 = createString(file1);
     char *str2 = createString(file2);
@@ -187,12 +215,76 @@ int levensthein_distance(char *file1, char *file2, int flag){
     
     int **matrix = matGenerate(str1, x, str2, y);
     int distance = matrix[x-1][y-1];
-    //PrintMatrix(matrix, x, y);
-    if(flag == 0){
-        matCalculate(matrix, str1, (x-1), str2, (y-1));
-    }
+    
     deallocateMat(x, matrix);
     free(str1);
     free(str2);
     return distance;
+}
+
+void instructionGenerate(char *file1, char *file2, char *output){
+    char *str1 = createString(file1);
+    char *str2 = createString(file2);
+
+    int x = (int) strlen(str1);
+    int y = (int) strlen(str2);
+    
+    int **matrix = matGenerate(str1, x, str2, y);
+    PrintMatrix(matrix, x, y);
+    saveOnFile(output, matCalculate(matrix, str1, (x-1), str2, (y-1)));
+    deallocateMat(x, matrix);
+    free(str1);
+    free(str2);
+}
+
+void readFromBinFile(char *filem){
+    FILE *binfile = fopen(filem, "rb");
+    if(binfile == NULL){
+        perror("Can't open file");
+        exit(1);
+    }
+    Lista *list = NULL;
+    
+    char command;
+    int pos;
+    char c;
+    
+    fseek(binfile, 0L, SEEK_END);
+    long sizeFileBin = ftell(binfile);
+    rewind(binfile);
+    
+    
+    while (!feof(binfile)) {
+        fread(&command, sizeof(char), 1, binfile);
+        switch (command) {
+            case 'S':
+                fseek(binfile, 2, SEEK_CUR);
+                fread(&pos, (sizeof(int)), 1, binfile);
+                //fseek(binfile, 0, SEEK_CUR);
+                fread(&c, (sizeof(char)), 1, binfile);
+                push(&list, SET, pos, c);
+                break;
+            case 'A':
+                fseek(binfile, 2, SEEK_CUR);
+                fread(&pos, (sizeof(int)), 1, binfile);
+                //fseek(binfile, 0, SEEK_CUR);
+                fread(&c, (sizeof(char)), 1, binfile);
+                push(&list, ADD, pos, c);
+                break;
+            case 'D':
+                fseek(binfile, 2, SEEK_CUR);
+                fread(&pos, (sizeof(int)), 1, binfile);
+                push(&list, DEL, pos, ' ');
+                break;
+        }
+    }
+    
+    //reverse(&list);
+    printList(list);
+    
+    fclose(binfile);
+    /*
+     Apro il file, e popolo la lista con i comandi che leggo in base al Type
+     e la ritorno per utilizzarla nella funzone modifyFile
+     */
 }

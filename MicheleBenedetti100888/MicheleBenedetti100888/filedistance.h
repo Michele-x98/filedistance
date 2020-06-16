@@ -17,6 +17,8 @@ void distance(char *file1, char *file2);
 
 void distanceOutput(char *file1, char *file2, char *outputfile);
 
-void apply(char *inputfile, char *filem, char *outputfile);
+//void apply(char *inputfile, char *filem, char *outputfile);
+
+void apply(char *filem);
 
 #endif /* filedistance_h */

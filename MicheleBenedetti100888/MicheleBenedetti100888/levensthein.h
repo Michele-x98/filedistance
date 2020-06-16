@@ -14,16 +14,20 @@
 #include <stdlib.h>
 #include "linked_list.h"
 
-char *saveOnFile(char *outputfile);
+// TODO: Vedere se, le funzioni non necessarie a filedistance debbano comunque essere dichiarate qui.
 
-void readFromFile(char *filem);
+//char *saveOnFile(char *outputfile, Lista *list);
 
-int minimum(int a, int b, int c);
+void instructionGenerate(char *file1, char *file2, char *output);
 
-void deallocateMat(int size, int** mat);
+void readFromBinFile(char *filem);
 
-void matCalculate(int **mat, char *str1, int x, char *str2, int y);
+//int minimum(int a, int b, int c);
 
-int levensthein_distance(char *file1, char *file2, int flag);
+//void deallocateMat(int size, int** mat);
+
+//Lista *matCalculate(int **mat, char *str1, int x, char *str2, int y);
+
+int levensthein_distance(char *file1, char *file2);
 
 #endif /* levensthein_h */

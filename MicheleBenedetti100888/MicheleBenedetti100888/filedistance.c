@@ -10,19 +10,17 @@
 
 void distance(char *file1, char *file2){
     start_timer();
-    int distance = levensthein_distance(file1, file2, 1);
+    int distance = levensthein_distance(file1, file2);
     printf("\nEDIT DISTANCE: %i \n", distance);
-    printf("TIME: %lf\n", stop_timer());
+    printf("TIME: %lf \n\n", stop_timer());
 }
 
 void distanceOutput(char *file1, char *file2, char *outputfile){
-    
-    int distance = levensthein_distance(file1, file2, 0);
-    
-    printf("Distance: %i \n", distance);
-    
-    saveOnFile(outputfile);
-    
-    //readFromFile(outputfile);
-    
+    start_timer();
+    instructionGenerate(file1, file2, outputfile);
+    printf("TIME: %lf\n", stop_timer());
+}
+
+void apply(char *filem){
+    readFromBinFile(filem);
 }

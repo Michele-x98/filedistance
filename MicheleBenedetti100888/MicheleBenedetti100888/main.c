@@ -28,17 +28,17 @@ int main(int argc, char *argv[]) {
     }else if (strcmp(argv[1], "distance") == 0){
         if (argc == 4) {
             distance(argv[2], argv[3]);
-        }
-        else if (argc == 5){
-            //TODO DISTANCE OUTPUT
+        }else if (argc == 5){
             distanceOutput(argv[2], argv[3], argv[4]);
         }else perror("Wrong number of arguments \n");
-    }else if ((strcmp(argv[1], "apply") == 0) && (argc == 5)){
-        //TODO APPLY
+    }else if ((strcmp(argv[1], "apply") == 0) && (argc == 3)){
+        //TODO: Apply
+        apply(argv[2]);
+        //apply(argv[2], argv[3], argv[4]);
     }else if ((strcmp(argv[1], "search") == 0) && (argc == 4)){
-        //TODO SEARCH
+        //TODO: SEARCH
     }else if ((strcmp(argv[1], "searchall") == 0) && (argc == 5)){
-        //TODO SEARCHALL
+        //TODO: SEARCHALL
     }else perror("Wrong numeber of arguments \n");
     return 0;
 }

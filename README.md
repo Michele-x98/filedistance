@@ -32,8 +32,8 @@ Queste istruzioni potranno essere salvate in un file per successive elaborazioni
 Per poter eseguire le funzionalità descritte sopra il programma potrà essere eseguito con le seguenti opzioni:
 ### Calcolo distanza tra file:
 
-*filedistance distance file1 file2*
-*filedistance distance file1 file2 output*
+> *filedistance distance file1 file2*
+>- *filedistance distance file1 file2 output*
 
 Nel primo caso, dove vengono passati come argomenti i due file da confrontare, viene calcolata la distanza dal file e generato un output della seguente forma:
 

@@ -20,15 +20,17 @@ typedef enum {
 
 typedef struct list{
     edit_type type;
-    int pos;
+    unsigned int pos;
     char character;
     struct list *next;
 }Lista;
 
-void push(Lista** head_ref, edit_type type, int pos, char character);
+void push(Lista** head_ref, edit_type type, unsigned int pos, char character);
 
 void reverse(Lista** head_ref);
 
 void printList(Lista *node);
+
+char *getType(Lista *list);
 
 #endif /* linked_list_h */

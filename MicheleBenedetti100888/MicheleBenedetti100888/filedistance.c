@@ -10,17 +10,31 @@
 
 void distance(char *file1, char *file2){
     start_timer();
-    int distance = levensthein_distance(file1, file2);
+    int distance = levensthein_distance(file2, file1);
     printf("\nEDIT DISTANCE: %i \n", distance);
     printf("TIME: %lf \n\n", stop_timer());
 }
 
 void distanceOutput(char *file1, char *file2, char *outputfile){
     start_timer();
-    instructionGenerate(file1, file2, outputfile);
+    instructionGenerate(file2, file1, outputfile);
     printf("TIME: %lf\n", stop_timer());
 }
 
-void apply(char *filem){
-    readFromBinFile(filem);
+void apply(char *inputfile, char *filem, char *outputfile){
+    start_timer();
+    modifyFile(inputfile, filem, outputfile);
+    printf("TIME: %lf\n", stop_timer());
+}
+
+void search(char *inputfile, char *dir){
+    start_timer();
+    getRecursive(inputfile, dir, -1);
+    printf("TIME: %lf\n", stop_timer());
+}
+
+void searchAll(char *inputfile, char *dir, int limit){
+    start_timer();
+    getRecursive(inputfile, dir, limit);
+    printf("TIME: %lf\n", stop_timer());
 }

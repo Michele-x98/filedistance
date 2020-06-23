@@ -11,14 +11,16 @@
 
 #include <stdio.h>
 #include "time.h"
-#include "levensthein.h"
+#include "recursive.h"
 
 void distance(char *file1, char *file2);
 
 void distanceOutput(char *file1, char *file2, char *outputfile);
 
-//void apply(char *inputfile, char *filem, char *outputfile);
+void apply(char *inputfile, char *filem, char *outputfile);
 
-void apply(char *filem);
+void search(char *inputfile, char *dir);
+
+void searchAll(char *inputfile, char *dir, int limit);
 
 #endif /* filedistance_h */

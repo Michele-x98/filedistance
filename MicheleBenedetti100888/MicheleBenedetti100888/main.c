@@ -31,14 +31,13 @@ int main(int argc, char *argv[]) {
         }else if (argc == 5){
             distanceOutput(argv[2], argv[3], argv[4]);
         }else perror("Wrong number of arguments \n");
-    }else if ((strcmp(argv[1], "apply") == 0) && (argc == 3)){
-        //TODO: Apply
-        apply(argv[2]);
-        //apply(argv[2], argv[3], argv[4]);
+    }else if ((strcmp(argv[1], "apply") == 0) && (argc == 5)){
+        apply(argv[2], argv[3], argv[4]);
     }else if ((strcmp(argv[1], "search") == 0) && (argc == 4)){
-        //TODO: SEARCH
+        search(argv[2], argv[3]);
     }else if ((strcmp(argv[1], "searchall") == 0) && (argc == 5)){
-        //TODO: SEARCHALL
+        int limit = atoi(argv[4]);
+        searchAll(argv[2], argv[3], limit);
     }else perror("Wrong numeber of arguments \n");
     return 0;
 }

@@ -1,5 +1,5 @@
 CC = gcc
-objects = main.o filedistance.o levensthein.o linked_list.o time.o
+objects = main.o filedistance.o levensthein.o linked_list.o time.o recursive.o
 
 all : filedistance
 
@@ -10,9 +10,11 @@ main.o : main.c
 
 filedistance.o : filedistance.c time.h linked_list.h
 
-levensthein.o : levensthein.c linked_list.h
+levensthein.o : levensthein.c linked_list.h recursive.h
 
 linked_list.o : linked_list.c
+
+recursive.o : recursive.c levensthein.h
 
 time.o : time.c
 

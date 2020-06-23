@@ -53,7 +53,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "distance"
+            argument = "searchall"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
@@ -62,11 +62,19 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "file2.txt"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "dir"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "output.txt"
+            argument = "30"
             isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "filem.bin"
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

@@ -2,7 +2,7 @@
 Progetto in C per corso di Sistemi Operativi Laboratorio.
 
 ## Progetto Laboratorio di Sistemi Operativi Giugno/Luglio 2020
-La ​distanza di edit ​è una funzione che consente di verificare quanto due stringhe (o sequenze di byte) siano ​lontane ​una dall’altra. Questa distanza viene calcolata sulla base del numero di operazioni necessarie a trasformare una stringa nell’altra. Le operazioni sono:
+La *distanza di edit* è una funzione che consente di verificare quanto due stringhe (o sequenze di byte) siano *lontane* una dall’altra. Questa distanza viene calcolata sulla base del numero di operazioni necessarie a trasformare una stringa nell’altra. Le operazioni sono:
 * Aggiungere un carattere/byte;
 * Eliminare un carattere/byte;
 * Modificare un carattere/byte.
@@ -32,30 +32,31 @@ Queste istruzioni potranno essere salvate in un file per successive elaborazioni
 Per poter eseguire le funzionalità descritte sopra il programma potrà essere eseguito con le seguenti opzioni:
 ### Calcolo distanza tra file:
 
-> *filedistance distance file1 file2*
+
+>- *filedistance distance file1 file2*
 >- *filedistance distance file1 file2 output*
 
 Nel primo caso, dove vengono passati come argomenti i due file da confrontare, viene calcolata la distanza dal file e generato un output della seguente forma:
 
-EDIT DISTANCE: *distanza*
-TIME: *tempo di calcolo*
+>- EDIT DISTANCE: *distanza*
+>- TIME: *tempo di calcolo*
 
 Nel secondo caso, invece, verranno salvate nel file *output* la sequenza delle istruzioni necessarie per trasformare il primo file nel secondo.
 
 ### Applicazione delle modifiche:
 
-*filedistance apply inputfile filem outputfile*
+>- *filedistance apply inputfile filem outputfile*
 
 Applica a *inputfile* le modifiche contenute nel file *filem* e salva il risultato nel file *outputfile•.
 
 ### Ricerca di file:
 
-*filedistance search inputfile dir*
+>- *filedistance search inputfile dir*
 
 Restituisce in output i file contenuti in *dir* (e nelle sue sottodirectory) che hanno minima distanza da •inputfile*. Il path assoluto di ogni file viene presentato in una riga dello *standard output*.
 
-*filedistance searchall inputfile dir limit*
+>- *filedistance searchall inputfile dir limit*
 
 Vengono restituiti in output tutti i file contenuti in dir (e nelle sue sottodirectory) che hanno una distanza da *inputfile* minore o uguale di *limit* (che è un intero). I file vengono presentati nello standard output in ordine crescente secondo il seguente formato:
 
-*distanza pathassolutofile*
+> *distanza pathassolutofile*

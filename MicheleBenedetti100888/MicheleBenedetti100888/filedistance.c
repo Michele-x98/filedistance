@@ -17,7 +17,18 @@ void distance(char *file1, char *file2){
 
 void distanceOutput(char *file1, char *file2, char *outputfile){
     start_timer();
-    instructionGenerate(file2, file1, outputfile);
+    char *str1 = createString(file2); //creo str1 dal file2
+    char *str2 = createString(file1); //creo str2 dal file1
+
+    int x = (int) strlen(str1)+1; //calcolo lunghezza di str1
+    int y = (int) strlen(str2)+1; //calcolo lunghezza di str2
+    
+    int **matrix = matGenerate(str1, x, str2, y); //prendo matrice calcolata
+    //genero (se non esiste) il file .bin con le istruzioni
+    generateBinaryFile(outputfile, matCalculate(matrix, str1, (x-1), str2, (y-1)));
+    deallocateMat(x, matrix); //dealloco la memoria della matrice
+    free(str1); //dealloco la memoria di str1
+    free(str2); //dealloco la memoria di str2
     printf("TIME: %lf\n", stop_timer());
 }
 

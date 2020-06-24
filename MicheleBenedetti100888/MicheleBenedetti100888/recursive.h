@@ -12,14 +12,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <dirent.h>
 #include "levensthein.h"
 
-typedef struct directory{
+/*
+ Struttura dati dinamica per la memorizzazione
+ dei path e delle relative distance da inputfile.
+ */
+typedef struct pathFile{
     char *path;
     int distance;
-    struct directory *next;
+    struct pathFile *next;
 }RecursiveList;
 
+/*
+Scan ricorsivo della directory per popolare la lista.
+Richiamo delle relarive funzioni per search || searchall
+*/
 void getRecursive(char *inputfile, char *basepath, int limit);
 
 #endif /* recursive_h */

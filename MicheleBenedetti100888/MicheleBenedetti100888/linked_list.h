@@ -18,6 +18,10 @@ typedef enum {
     DEL,
 } edit_type;
 
+/*
+ Struttura dati dinamica per la memorizzazione
+delle istruzioni da applicare ad un file.
+ */
 typedef struct list{
     edit_type type;
     unsigned int pos;
@@ -25,12 +29,26 @@ typedef struct list{
     struct list *next;
 }Lista;
 
+/*
+ Funzione per aggiungere un nodo in testa alla lista.
+ */
 void push(Lista** head_ref, edit_type type, unsigned int pos, char character);
 
+/*
+ Funzione per effettuare il reverse della lista.
+ */
 void reverse(Lista** head_ref);
 
-void printList(Lista *node);
-
+/*
+ Funzione per ottenere la stringa associata
+ all'edit_type presente nella lista.
+ */
 char *getType(Lista *list);
+
+/*
+ Funzione per inserire il contenuto di un file
+ in un buffer.
+ */
+char *createString(char *file);
 
 #endif /* linked_list_h */

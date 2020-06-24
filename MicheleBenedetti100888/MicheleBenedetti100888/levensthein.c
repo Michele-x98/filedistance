@@ -10,19 +10,11 @@
 
 int minimum(int a, int b, int c);
 
-void generateBinaryFile(char *outputfile, Lista *list);
-
-void deallocateMat(int size, int** mat);
-
-Lista *matCalculate(int **mat, char *str1, int x, char *str2, int y);
-
-char *createString(char *file);
-
-int **matGenerate(char *str1, int x, char *str2, int y);
-
+/*
+Funzione per riempire la matrice
+Restiusco la matrice riempita.
+*/
 int **initMatrix(int **matrix, char *str1, int x, char *str2, int y);
-
-Lista *readFromBinFile(char *filem);
 
 int minimum(int a, int b, int c) {
 
@@ -41,7 +33,7 @@ void deallocateMat(int size, int** mat){
     free(mat);
 }
 
-//TODO: Cancello
+//TODO: CANCELLO PRIMA DELLA CONSEGNA
 void PrintMatrix(int **matrix, int rows, int columns){
     
     printf("\n");
@@ -55,13 +47,12 @@ void PrintMatrix(int **matrix, int rows, int columns){
 Lista *matCalculate(int **mat, char *str1, int x, char *str2, int y){
     
     Lista *list = NULL;
-    
+    //mi posiziono alla fine della matrice
     int curr = mat[x][y];
     
     int prev = 0, add = 0, del = 0, set = 0;
     
     while (curr !=0) {
-        
         if (x == 0) {
             del = mat[x][y-1];
             prev = mat[x][y-1];
@@ -98,26 +89,7 @@ Lista *matCalculate(int **mat, char *str1, int x, char *str2, int y){
         }
     }
     reverse(&list);
-    printList(list);
     return list;
-}
-
-char *createString(char *file){
-    FILE *fin = fopen(file , "r" );
-    if(fin == NULL){
-        perror("Could not open file");
-        exit(1);
-    }
-    
-    fseek(fin, 0L, SEEK_END);
-    long sizeFin = ftell(fin);
-    rewind(fin);
-    char *str = calloc(1, sizeFin);
-    if(str != NULL){
-        fread(str , sizeFin, 1 , fin);
-    }
-    fclose(fin);
-    return str;
 }
 
 int **initMatrix(int **matrix, char *str1, int x, char *str2, int y){
@@ -152,30 +124,28 @@ int **matGenerate(char *str1, int x, char *str2, int y){
             mat[0][j]=j;
         }
     }
-    int **matApp = initMatrix(mat, str1, x, str2, y);
-    //PrintMatrix(matApp, x, y);
-    return matApp;
+    return initMatrix(mat, str1, x, str2, y);
 }
 
 int levensthein_distance(char *file1, char *file2){
     
-    char *str1 = createString(file1); //da modificare
-    char *str2 = createString(file2); //target
-
-    int x = (int) strlen(str1)+1;
-    int y = (int) strlen(str2)+1;
+    char *str1 = createString(file1); //creo prima stringa
+    char *str2 = createString(file2); //creo secondo stringa
+    
+    int x = (int) strlen(str1)+1; //prendo lunghezza di str1
+    int y = (int) strlen(str2)+1; //prendo lunghezza di str2
     
     //Base case
     if (x == 0)
         return y;
     if (y == 0)
         return x;
-    
-    int **matrix = matGenerate(str1, x, str2, y);
-    int distance = matrix[x-1][y-1];
-    deallocateMat(x, matrix);
-    free(str1);
-    free(str2);
+
+    int **matrix = matGenerate(str1, x, str2, y); //prendo matrice calcolata
+    int distance = matrix[x-1][y-1]; //leggo distance di edit
+    deallocateMat(x, matrix); //dealloco memoria della matrice
+    free(str1); //dealloco memoria str1
+    free(str2); //dealloco memoria str2
     return distance;
 }
 
@@ -192,10 +162,12 @@ void generateBinaryFile(char *outputfile, Lista *list){
     while (list != NULL) {
         switch (list->type) {
             case DEL:
-                command = getType(list);
+                command = getType(list); //prendo il comando
                 for (int i = 0; i<3; i++) {
+                    //scrio carattere per carattere nel file bin
                     fwrite(&command[i], sizeof(char), 1, filebin);
                 }
+                //scrivo posizione nel carattere successivo
                 fwrite(&list->pos, sizeof(unsigned int), 1, filebin);
                 break;
             case ADD:
@@ -221,131 +193,3 @@ void generateBinaryFile(char *outputfile, Lista *list){
     }
     fclose(filebin);
 }
-
-void instructionGenerate(char *file1, char *file2, char *output){
-    char *str1 = createString(file1);
-    char *str2 = createString(file2);
-
-    int x = (int) strlen(str1)+1;
-    int y = (int) strlen(str2)+1;
-    
-    int **matrix = matGenerate(str1, x, str2, y);
-    PrintMatrix(matrix, x, y);
-    generateBinaryFile(output, matCalculate(matrix, str1, (x-1), str2, (y-1)));
-    deallocateMat(x, matrix);
-    free(str1);
-    free(str2);
-}
-
-Lista *readFromBinFile(char *filem){
-    FILE *binfile = fopen(filem, "rb+");
-    if(binfile == NULL){
-        perror("Could not open file");
-        exit(1);
-    }
-    
-    Lista *list = NULL;
-    
-    char command;
-    unsigned int pos = 0;
-    char c;
-    
-    while (!feof(binfile)) {
-        fread(&command, sizeof(char), 1, binfile);
-        switch (command) {
-            case 'S':
-                fseek(binfile, 2, SEEK_CUR);
-                fread(&pos, (sizeof(unsigned int)), 1, binfile);
-                fread(&c, (sizeof(char)), 1, binfile);
-                push(&list, SET, pos, c);
-                command = '\0';
-                break;
-            case 'A':
-                fseek(binfile, 2, SEEK_CUR);
-                fread(&pos, (sizeof(unsigned int)), 1, binfile);
-                fread(&c, (sizeof(char)), 1, binfile);
-                push(&list, ADD, pos, c);
-                command = '\0';
-                break;
-            case 'D':
-                fseek(binfile, 2, SEEK_CUR);
-                fread(&pos, (sizeof(unsigned int)), 1, binfile);
-                push(&list, DEL, pos, ' ');
-                command = '\0';
-                break;
-        }
-    }
-    reverse(&list);
-    printList(list);
-    fclose(binfile);
-    return list;
-}
-
-void generateOutputFile(char *outputfile, char *string){
-    FILE *fout = fopen(outputfile, "w");
-    if (fout == NULL) {
-        perror("Could not open file");
-        exit(1);
-    }
-    fputs(string, fout);
-}
-
-char *addChar(char *string, unsigned int pos, char character){
-        int i, len;
-        char *temp = NULL;
-        len = string ? (unsigned int) strlen(string) : 0;
-        temp = (char *)calloc(1, len + 2);
-        if (temp != NULL) {
-            /* sanitize position */
-            if (pos > len)
-                pos = len;
-            /* copy initial portion */
-            for (i = 0; i <pos; i++) {
-                temp[i] = string[i];
-            }
-            /* insert new character */
-            temp[i] = character;
-            /* copy remainder of the source string if any */
-            for (; i < len; i++) {
-                temp[i + 1] = string[i];
-            }
-            /* set the null terminator */
-            temp[i + 1] = '\0';
-            free(string);
-        }
-        return temp;
-}
-
-char *delChar(char *string, unsigned int pos){
-    char *temp = NULL;
-    temp = memmove(&string[pos], &string[pos + 1], strlen(string) - pos);
-    return string;
-}
-
-char *setChar(char *string, unsigned int pos, char character){
-    string[pos] = character;
-    return string;
-}
-
-void modifyFile(char *inputfile, char *filem, char *outputfile){
-    
-    Lista *list = readFromBinFile(filem);
-    char *string = createString(inputfile);
-    
-    while (list != NULL) {
-        switch (list->type) {
-            case SET:
-                string = setChar(string, list->pos-1, list->character);
-                break;
-            case DEL:
-                string = delChar(string, list->pos-1);
-                break;
-            case ADD:
-                string = addChar(string, list->pos, list->character);
-                break;
-        }
-        list = list->next;
-    }
-    generateOutputFile(outputfile, string);
-}
-

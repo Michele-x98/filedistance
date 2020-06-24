@@ -49,13 +49,24 @@ char *getType(Lista *list){
     }
 }
 
-void printList(Lista *node)
-{
-    while (node != NULL)
-    {
-        printf("\nType: %s \n", getType(node));
-        printf("Pos: %i \n", node->pos);
-        printf("Char: %c \n", node->character);
-        node = node->next;
+char *createString(char *file){
+    FILE *fin = fopen(file , "r" );
+    if(fin == NULL){
+        perror("Could not open file");
+        exit(1);
     }
+    //apro il file e mi posiziono alla fine del file
+    fseek(fin, 0L, SEEK_END);
+    //salvo la lunghezza del file su sizeFin
+    long sizeFin = ftell(fin);
+    //mi riposiziono all'inizio del file
+    rewind(fin);
+    //creo un buffer grande sizefin
+    char *str = calloc(1, sizeFin);
+    //inserisco il contenuto del file in str
+    if(str != NULL){
+        fread(str , sizeFin, 1 , fin);
+    }
+    fclose(fin);
+    return str;
 }

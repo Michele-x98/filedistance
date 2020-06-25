@@ -33,17 +33,6 @@ void deallocateMat(int size, int** mat){
     free(mat);
 }
 
-//TODO: CANCELLO PRIMA DELLA CONSEGNA
-void PrintMatrix(int **matrix, int rows, int columns){
-    
-    printf("\n");
-    for(int i=0; i<rows; i++){
-        for(int j=0; j<columns; j++)
-            printf("%d\t", matrix[i][j]);
-        printf("\n");
-    }
-}
-
 Lista *matCalculate(int **mat, char *str1, int x, char *str2, int y){
     
     Lista *list = NULL;
@@ -69,21 +58,21 @@ Lista *matCalculate(int **mat, char *str1, int x, char *str2, int y){
     if(prev == set){
         curr = prev;
         if(str1[x-1] != str2[y-1]){
-            printf("REPLACE CHAR: %c at POS: %i \n", str1[x-1], y);
+            printf("SET%i%c \n", y, str1[x-1]);
             push(&list,SET,y ,str1[x-1]);
         }
     x--;y--;
     }else if(prev == add){
         //ADD
         curr = prev;
-        printf("ADD CHAR: %c AT POS: %i \n", str1[x-1], y);
+        printf("ADD%i%c \n", y, str1[x-1]);
         push(&list, ADD, y, str1[x-1]);
         x--;
         }
         else if(prev == del){
             curr = prev;
             //DEL
-            printf("DELETE CHAR AT POS: %i \n", y);
+            printf("DEL%i \n", y);
             push(&list, DEL, y, ' ');
             y--;
         }

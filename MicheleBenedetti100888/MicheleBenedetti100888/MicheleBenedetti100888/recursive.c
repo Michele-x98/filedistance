@@ -10,23 +10,38 @@
 
 RecursiveList *dirList = NULL;
 
+/*
+Aggiunta di un nodo alla lista
+*/
 void add(RecursiveList** head, char *path, int distance);
 
+/*
+Scan ricorsivo della directory basePath.
+Aggiunta della distanza e del path relativo alla lista.
+*/
 void listFilesRecursively(char *inputfile, char *basePath);
 
+/*
+ Funzione per l'Algoritmo del MergeSort
+ */
 void MergeSort(RecursiveList** headRef);
 
 RecursiveList* SortedMerge(RecursiveList* a, RecursiveList* b);
 
 void FrontBackSplit(RecursiveList* source, RecursiveList** frontRef, RecursiveList** backRef);
 
+/*
+Ordino la lista in modo crescente e stampo i pathAssoluti
+dei file con distanza minore o uguale a limit.
+*/
 void printLimitDistance(int limit);
 
+/*
+Ordino la lista in modo crescente e stampo i pathAssoluti
+con minor distanza da inputfile.
+*/
 void printMinDistance(void);
 
-/*
- Aggiunta di un nodo alla lista
- */
 void add(RecursiveList** head, char *path, int distance)
 {
     RecursiveList* new_node = (RecursiveList*)malloc(sizeof(RecursiveList));
@@ -39,10 +54,6 @@ void add(RecursiveList** head, char *path, int distance)
     (*head) = new_node;
 }
 
-/*
- Scan ricorsivo della directory basePath.
- Aggiunta della distanza e del path relativo alla lista.
- */
 void listFilesRecursively(char *inputfile, char *basePath)
 {
     char path[1000];
@@ -71,10 +82,6 @@ void listFilesRecursively(char *inputfile, char *basePath)
     closedir(dir);
 }
 
-/*
- Ordino la lista in modo crescente e stampo i pathAssoluti
- dei file con distanza minore o uguale a limit.
- */
 void printLimitDistance(int limit){
     MergeSort(&dirList);
     while (dirList != NULL) {
@@ -83,24 +90,17 @@ void printLimitDistance(int limit){
             printf("%i \t %s \n",dirList->distance, real_path);
         }
         free(real_path);
+        free(dirList->path);
         dirList = dirList->next;
     }
+    free(dirList);
 }
 
-/*
- Ordino la lista in modo crescente e stampo i pathAssoluti
- con minor distanza da inputfile.
- */
 void printMinDistance(void){
     MergeSort(&dirList);
     printLimitDistance(dirList->distance);
 }
 
-/*
-Scan ricorsivo della directory per popolare la lista.
-Richiamo delle relarive funzioni per search || searchall
-in base al valore passato su limit
-*/
 void getRecursive(char *inputfile, char *basepath, int limit){
     listFilesRecursively(inputfile, basepath);
     if(limit != -1){
@@ -110,9 +110,6 @@ void getRecursive(char *inputfile, char *basepath, int limit){
     }
 }
 
-/*
- Funzioni per il MargeSort
- */
 RecursiveList* SortedMerge(RecursiveList* a, RecursiveList* b)
 {
     RecursiveList* result = NULL;

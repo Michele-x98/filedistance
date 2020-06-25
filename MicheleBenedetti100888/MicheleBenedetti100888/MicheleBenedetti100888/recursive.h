@@ -29,6 +29,7 @@ typedef struct pathFile{
 Scan ricorsivo della directory per popolare la lista.
 Richiamo delle relarive funzioni per search || searchall
 */
+
 void getRecursive(char *inputfile, char *basepath, int limit);
 
 #endif /* recursive_h */

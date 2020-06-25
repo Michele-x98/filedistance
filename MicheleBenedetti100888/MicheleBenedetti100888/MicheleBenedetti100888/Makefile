@@ -21,4 +21,4 @@ modfile.o : modfile.c linked_list.h
 time.o : time.c
 
 clean :
-	rm *.o filedistance *.bin output.txt
+	rm *.o filedistance *.bin

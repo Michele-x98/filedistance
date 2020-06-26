@@ -19,11 +19,12 @@
  Struttura dati dinamica per la memorizzazione
  dei path e delle relative distance da inputfile.
  */
-typedef struct pathFile{
+typedef struct pathFile
+{
     char *path;
     int distance;
     struct pathFile *next;
-}RecursiveList;
+} RecursiveList;
 
 /*
 Scan ricorsivo della directory per popolare la lista.

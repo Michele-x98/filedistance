@@ -17,7 +17,7 @@
 /*
 Funzione per deallocare la memoria della matrice
 */
-void deallocateMat(int size, int** mat);
+void deallocateMat(int size, int **mat);
 
 /*
 Funzione per generare ed inizializzare la matrice

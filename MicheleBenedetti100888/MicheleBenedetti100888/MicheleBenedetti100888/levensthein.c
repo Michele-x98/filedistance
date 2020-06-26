@@ -16,60 +16,78 @@ Restiusco la matrice riempita.
 */
 int **initMatrix(int **matrix, char *str1, int x, char *str2, int y);
 
-int minimum(int a, int b, int c) {
+int minimum(int a, int b, int c)
+{
 
     int min = a;
 
-    if (b < min) min = b;
-    if (c < min) min = c;
+    if (b < min)
+        min = b;
+    if (c < min)
+        min = c;
 
     return min;
 }
 
-void deallocateMat(int size, int** mat){
-    for (int i = 0; i<size; i++) {
+void deallocateMat(int size, int **mat)
+{
+    for (int i = 0; i < size; i++)
+    {
         free(mat[i]);
     }
     free(mat);
 }
 
-Lista *matCalculate(int **mat, char *str1, int x, char *str2, int y){
-    
+Lista *matCalculate(int **mat, char *str1, int x, char *str2, int y)
+{
+
     Lista *list = NULL;
     //mi posiziono alla fine della matrice
     int curr = mat[x][y];
-    
+
     int prev = 0, add = 0, del = 0, set = 0;
-    
-    while (curr !=0) {
-        if (x == 0) {
-            del = mat[x][y-1];
-            prev = mat[x][y-1];
-        }else if(y == 0){
-            add = mat[x-1][y];
-            prev = mat[x-1][y];
-        }else if(x > 0 && y >0){
-    add = mat[x-1][y];
-    set = mat[x-1][y-1];
-    del = mat[x][y-1];
-    prev = minimum(del, set, add);
-    }
-    //SET
-    if(prev == set){
-        curr = prev;
-        if(str1[x-1] != str2[y-1]){
-            printf("SET%i%c \n", y, str1[x-1]);
-            push(&list,SET,y ,str1[x-1]);
+
+    while (curr != 0)
+    {
+        if (x == 0)
+        {
+            del = mat[x][y - 1];
+            prev = mat[x][y - 1];
         }
-    x--;y--;
-    }else if(prev == add){
-        //ADD
-        curr = prev;
-        printf("ADD%i%c \n", y, str1[x-1]);
-        push(&list, ADD, y, str1[x-1]);
-        x--;
+        else if (y == 0)
+        {
+            add = mat[x - 1][y];
+            prev = mat[x - 1][y];
         }
-        else if(prev == del){
+        else if (x > 0 && y > 0)
+        {
+            add = mat[x - 1][y];
+            set = mat[x - 1][y - 1];
+            del = mat[x][y - 1];
+            prev = minimum(del, set, add);
+        }
+        //SET
+        if (prev == set)
+        {
+            curr = prev;
+            if (str1[x - 1] != str2[y - 1])
+            {
+                printf("SET%i%c \n", y, str1[x - 1]);
+                push(&list, SET, y, str1[x - 1]);
+            }
+            x--;
+            y--;
+        }
+        else if (prev == add)
+        {
+            //ADD
+            curr = prev;
+            printf("ADD%i%c \n", y, str1[x - 1]);
+            push(&list, ADD, y, str1[x - 1]);
+            x--;
+        }
+        else if (prev == del)
+        {
             curr = prev;
             //DEL
             printf("DEL%i \n", y);
@@ -81,12 +99,14 @@ Lista *matCalculate(int **mat, char *str1, int x, char *str2, int y){
     return list;
 }
 
-int **initMatrix(int **matrix, char *str1, int x, char *str2, int y){
+int **initMatrix(int **matrix, char *str1, int x, char *str2, int y)
+{
     int cost = 0;
-    
-    for(int i=1; i<x; i++){
-        for(int j=1; j<y; j++){
-            
+
+    for (int i = 1; i < x; i++)
+    {
+        for (int j = 1; j < y; j++)
+        {
             if (str1[i - 1] == str2[j - 1])
                 cost = 0;
             else
@@ -100,30 +120,35 @@ int **initMatrix(int **matrix, char *str1, int x, char *str2, int y){
     return matrix;
 }
 
-int **matGenerate(char *str1, int x, char *str2, int y){
-    
-    int **mat = malloc(sizeof(int*) * x);
-    if(mat != NULL)
-    for (int i=0; i<x; i++){
-        mat[i] = calloc(1, sizeof(int) * y);
-    }
-    for(int i=0; i<x; i++){
-        for(int j=0; j<y; j++){
-            mat[i][0]=i;
-            mat[0][j]=j;
+int **matGenerate(char *str1, int x, char *str2, int y)
+{
+
+    int **mat = malloc(sizeof(int *) * x);
+    if (mat != NULL)
+        for (int i = 0; i < x; i++)
+        {
+            mat[i] = calloc(1, sizeof(int) * y);
+        }
+    for (int i = 0; i < x; i++)
+    {
+        for (int j = 0; j < y; j++)
+        {
+            mat[i][0] = i;
+            mat[0][j] = j;
         }
     }
     return initMatrix(mat, str1, x, str2, y);
 }
 
-int levensthein_distance(char *file1, char *file2){
-    
+int levensthein_distance(char *file1, char *file2)
+{
+
     char *str1 = createString(file1); //creo prima stringa
     char *str2 = createString(file2); //creo secondo stringa
-    
-    int x = (int) strlen(str1)+1; //prendo lunghezza di str1
-    int y = (int) strlen(str2)+1; //prendo lunghezza di str2
-    
+
+    int x = (int)strlen(str1) + 1; //prendo lunghezza di str1
+    int y = (int)strlen(str2) + 1; //prendo lunghezza di str2
+
     //Base case
     if (x == 0)
         return y;
@@ -131,52 +156,59 @@ int levensthein_distance(char *file1, char *file2){
         return x;
 
     int **matrix = matGenerate(str1, x, str2, y); //prendo matrice calcolata
-    int distance = matrix[x-1][y-1]; //leggo distance di edit
-    deallocateMat(x, matrix); //dealloco memoria della matrice
-    free(str1); //dealloco memoria str1
-    free(str2); //dealloco memoria str2
+    int distance = matrix[x - 1][y - 1];          //leggo distance di edit
+    deallocateMat(x, matrix);                     //dealloco memoria della matrice
+    free(str1);                                   //dealloco memoria str1
+    free(str2);                                   //dealloco memoria str2
     return distance;
 }
 
-void generateBinaryFile(char *outputfile, Lista *list){
+void generateBinaryFile(char *outputfile, Lista *list)
+{
     FILE *filebin;
-    if ((filebin = fopen(outputfile,"wb+")) == NULL){
+    if ((filebin = fopen(outputfile, "wb+")) == NULL)
+    {
         perror("Could not open file");
         exit(1);
     }
-    
-    char* command = NULL;
+
+    char *command = NULL;
     unsigned int num = 0;
-    
-    while (list != NULL) {
-        switch (list->type) {
-            case DEL:
-                command = getType(list); //prendo il comando
-                for (int i = 0; i<3; i++) {
-                    //scrio carattere per carattere nel file bin
-                    fwrite(&command[i], sizeof(char), 1, filebin);
-                }
-                //scrivo posizione nel carattere successivo
-                fwrite(&list->pos, sizeof(unsigned int), 1, filebin);
-                break;
-            case ADD:
-                command = getType(list);
-                for (int i = 0; i<3; i++) {
-                    fwrite(&command[i], sizeof(char), 1, filebin);
-                }
-                num = list->pos;
-                fwrite(&num, sizeof(unsigned int), 1, filebin);
-                fwrite(&list->character, sizeof(char), 1, filebin);
-                break;
-            case SET:
-                command = getType(list);
-                for (int i = 0; i<3; i++) {
-                    fwrite(&command[i], sizeof(char), 1, filebin);
-                }
-                num = list->pos;
-                fwrite(&num, sizeof(unsigned int), 1, filebin);
-                fwrite(&list->character, sizeof(char), 1, filebin);
-                break;
+
+    while (list != NULL)
+    {
+        switch (list->type)
+        {
+        case DEL:
+            command = getType(list); //prendo il comando
+            for (int i = 0; i < 3; i++)
+            {
+                //scrio carattere per carattere nel file bin
+                fwrite(&command[i], sizeof(char), 1, filebin);
+            }
+            //scrivo posizione nel carattere successivo
+            fwrite(&list->pos, sizeof(unsigned int), 1, filebin);
+            break;
+        case ADD:
+            command = getType(list);
+            for (int i = 0; i < 3; i++)
+            {
+                fwrite(&command[i], sizeof(char), 1, filebin);
+            }
+            num = list->pos;
+            fwrite(&num, sizeof(unsigned int), 1, filebin);
+            fwrite(&list->character, sizeof(char), 1, filebin);
+            break;
+        case SET:
+            command = getType(list);
+            for (int i = 0; i < 3; i++)
+            {
+                fwrite(&command[i], sizeof(char), 1, filebin);
+            }
+            num = list->pos;
+            fwrite(&num, sizeof(unsigned int), 1, filebin);
+            fwrite(&list->character, sizeof(char), 1, filebin);
+            break;
         }
         list = list->next;
     }
